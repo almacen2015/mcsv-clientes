@@ -50,7 +50,7 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteMapper.toListResponseDTO(clientes);
     }
 
-    private void verificarSiTieneLetra(String numeroDocumento) {
+    private void verificarLetraNumeroDocumento(String numeroDocumento) {
         if (numeroDocumento.matches(".*[a-zA-Z]+.*")) {
             throw new ClienteException(ClienteException.NUMERO_DOCUMENTO_INVALIDO);
         }
@@ -89,7 +89,7 @@ public class ClienteServiceImpl implements ClienteService {
             throw new ClienteException(ClienteException.TIPO_DOCUMENTO_INVALIDO);
         }
 
-        verificarSiTieneLetra(tipoDocumento);
+        verificarLetraNumeroDocumento(tipoDocumento);
     }
 
     private void verificarFechaNacimiento(String fechaNacimiento) {
