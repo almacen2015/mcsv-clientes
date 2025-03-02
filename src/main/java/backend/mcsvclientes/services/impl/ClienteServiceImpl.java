@@ -50,6 +50,12 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteMapper.toListResponseDTO(clientes);
     }
 
+    private void verificarSiTieneLetra(String numeroDocumento) {
+        if (numeroDocumento.matches(".*[a-zA-Z]+.*")) {
+            throw new ClienteException(ClienteException.NUMERO_DOCUMENTO_INVALIDO);
+        }
+    }
+
     private void verificarId(Long id) {
         if (id == null || id <= 0) {
             throw new ClienteException(ClienteException.ID_INVALIDO);
@@ -82,6 +88,8 @@ public class ClienteServiceImpl implements ClienteService {
         if (!tipoDocumento.equals(TipoDocumento.PASAPORTE.name()) && !tipoDocumento.equals(TipoDocumento.DNI.name())) {
             throw new ClienteException(ClienteException.TIPO_DOCUMENTO_INVALIDO);
         }
+
+        verificarSiTieneLetra(tipoDocumento);
     }
 
     private void verificarFechaNacimiento(String fechaNacimiento) {
@@ -90,7 +98,7 @@ public class ClienteServiceImpl implements ClienteService {
         }
 
         LocalDate fechaNacimientoLocalDate = convertirFechaNacimiento(fechaNacimiento);
-        if (fechaNacimientoLocalDate.isBefore(LocalDate.now())) {
+        if (fechaNacimientoLocalDate.isAfter(LocalDate.now())) {
             throw new ClienteException(ClienteException.FECHA_NACIMIENTO_INVALIDA);
         }
     }

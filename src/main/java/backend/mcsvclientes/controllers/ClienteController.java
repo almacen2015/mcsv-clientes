@@ -1,5 +1,6 @@
 package backend.mcsvclientes.controllers;
 
+import backend.mcsvclientes.models.dtos.ClienteRequestDTO;
 import backend.mcsvclientes.models.dtos.ClienteResponseDTO;
 import backend.mcsvclientes.services.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,19 @@ public class ClienteController {
     @GetMapping
     public ResponseEntity<List<ClienteResponseDTO>> listar() {
         return new ResponseEntity<>(clienteService.listar(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @Operation(summary = "Registrar un cliente", description = "Registra un cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente registrado"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "401", description = "No autorizado"),
+            @ApiResponse(responseCode = "500", description = "Error interno")
+    })
+    @PostMapping
+    public ResponseEntity<ClienteResponseDTO> registrar(@RequestBody ClienteRequestDTO cliente) {
+        return new ResponseEntity<>(clienteService.registrar(cliente), HttpStatus.OK);
     }
 
 }
