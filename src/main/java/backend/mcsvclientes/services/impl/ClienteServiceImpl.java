@@ -50,6 +50,14 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteMapper.toListResponseDTO(clientes);
     }
 
+    @Override
+    public ClienteResponseDTO buscarPorId(Long id) {
+        verificarId(id);
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ClienteException(ClienteException.CLIENTE_NO_ENCONTRADO));
+
+        return clienteMapper.toResponseDTO(cliente);
+    }
+
     private void verificarLetraNumeroDocumento(String numeroDocumento) {
         if (numeroDocumento.matches(".*[a-zA-Z]+.*")) {
             throw new ClienteException(ClienteException.NUMERO_DOCUMENTO_INVALIDO);

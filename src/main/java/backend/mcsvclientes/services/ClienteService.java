@@ -10,4 +10,6 @@ public interface ClienteService {
 
     List<ClienteResponseDTO> listar();
 
+    ClienteResponseDTO buscarPorId(Long id);
+
 }

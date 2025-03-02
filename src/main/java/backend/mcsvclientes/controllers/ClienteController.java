@@ -48,4 +48,17 @@ public class ClienteController {
         return new ResponseEntity<>(clienteService.registrar(cliente), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @Operation(summary = "Buscar un cliente por ID", description = "Busca un cliente por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "401", description = "No autorizado"),
+            @ApiResponse(responseCode = "500", description = "Error interno")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long id) {
+        return new ResponseEntity<>(clienteService.buscarPorId(id), HttpStatus.OK);
+    }
+
 }
