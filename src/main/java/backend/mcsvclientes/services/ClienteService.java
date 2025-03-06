@@ -6,10 +6,10 @@ import backend.mcsvclientes.models.dtos.ClienteResponseDTO;
 import java.util.List;
 
 public interface ClienteService {
-    ClienteResponseDTO registrar(ClienteRequestDTO cliente);
+    ClienteResponseDTO add(ClienteRequestDTO cliente);
 
-    List<ClienteResponseDTO> listar();
+    List<ClienteResponseDTO> listAll();
 
-    ClienteResponseDTO buscarPorId(Long id);
+    ClienteResponseDTO finById(Long id);
 
 }

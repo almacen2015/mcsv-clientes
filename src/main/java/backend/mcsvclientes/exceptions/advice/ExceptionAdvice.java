@@ -14,13 +14,13 @@ import java.util.Set;
 public class ExceptionAdvice {
 
     private static final Set<String> ERRORES_VALIDACION = Set.of(
-            ClienteException.ID_INVALIDO,
-            ClienteException.APELLIDO_INVALIDO,
-            ClienteException.NOMBRE_INVALIDO,
-            ClienteException.FECHA_NACIMIENTO_INVALIDA,
-            ClienteException.NUMERO_DOCUMENTO_INVALIDO,
-            ClienteException.TIPO_DOCUMENTO_INVALIDO,
-            ClienteException.CLIENTE_NO_ENCONTRADO
+            ClienteException.ID_INVALID,
+            ClienteException.INVALID_LAST_NAME,
+            ClienteException.INVALID_NAME,
+            ClienteException.INVALID_BIRTH_DATE,
+            ClienteException.INVALID_DOCUMENT_NUMBER,
+            ClienteException.INVALID_DOCUMENT_TYPE,
+            ClienteException.CLIENT_NOT_FOUND
     );
 
     @ExceptionHandler(ClienteException.class)

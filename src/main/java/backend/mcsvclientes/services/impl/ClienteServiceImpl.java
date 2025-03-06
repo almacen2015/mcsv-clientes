@@ -27,12 +27,12 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional(rollbackFor = ClienteException.class)
-    public ClienteResponseDTO registrar(ClienteRequestDTO dto) {
-        verificarNombre(dto.nombre());
-        verificarApellido(dto.apellido());
-        verificarNumeroDocumento(dto.numeroDocumento());
-        verificarTipoDocumento(dto.tipoDocumento());
-        verificarFechaNacimiento(dto.fechaNacimiento());
+    public ClienteResponseDTO add(ClienteRequestDTO dto) {
+        validateNombre(dto.nombre());
+        validateApellido(dto.apellido());
+        validateNumeroDocumento(dto.numeroDocumento());
+        validateTipoDocumento(dto.tipoDocumento());
+        validateFechaNacimiento(dto.fechaNacimiento());
 
         Cliente cliente = clienteMapper.toEntity(dto);
 
@@ -44,87 +44,86 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public List<ClienteResponseDTO> listar() {
+    public List<ClienteResponseDTO> listAll() {
         List<Cliente> clientes = clienteRepository.findAll();
 
         return clienteMapper.toListResponseDTO(clientes);
     }
 
     @Override
-    public ClienteResponseDTO buscarPorId(Long id) {
-        verificarId(id);
-        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ClienteException(ClienteException.CLIENTE_NO_ENCONTRADO));
+    public ClienteResponseDTO finById(Long id) {
+        validateId(id);
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ClienteException(ClienteException.CLIENT_NOT_FOUND));
 
         return clienteMapper.toResponseDTO(cliente);
     }
 
-    private void verificarLetraNumeroDocumento(String numeroDocumento) {
+    private void validateLetraNumeroDocumento(String numeroDocumento) {
         if (numeroDocumento.matches(".*[a-zA-Z]+.*")) {
-            throw new ClienteException(ClienteException.NUMERO_DOCUMENTO_INVALIDO);
+            throw new ClienteException(ClienteException.INVALID_DOCUMENT_NUMBER);
         }
     }
 
-    private void verificarId(Long id) {
+    private void validateId(Long id) {
         if (id == null || id <= 0) {
-            throw new ClienteException(ClienteException.ID_INVALIDO);
+            throw new ClienteException(ClienteException.ID_INVALID);
         }
     }
 
-    private void verificarNombre(String nombre) {
+    private void validateNombre(String nombre) {
         if (nombre == null || nombre.isEmpty()) {
-            throw new ClienteException(ClienteException.NOMBRE_INVALIDO);
+            throw new ClienteException(ClienteException.INVALID_NAME);
         }
     }
 
-    private void verificarApellido(String apellido) {
+    private void validateApellido(String apellido) {
         if (apellido == null || apellido.isEmpty()) {
-            throw new ClienteException(ClienteException.APELLIDO_INVALIDO);
+            throw new ClienteException(ClienteException.INVALID_LAST_NAME);
         }
     }
 
-    private void verificarNumeroDocumento(String numeroDocumento) {
+    private void validateNumeroDocumento(String numeroDocumento) {
         if (numeroDocumento == null || numeroDocumento.isEmpty()) {
-            throw new ClienteException(ClienteException.NUMERO_DOCUMENTO_INVALIDO);
+            throw new ClienteException(ClienteException.INVALID_DOCUMENT_NUMBER);
         }
+        validateLetraNumeroDocumento(numeroDocumento);
     }
 
-    private void verificarTipoDocumento(String tipoDocumento) {
+    private void validateTipoDocumento(String tipoDocumento) {
         if (tipoDocumento == null || tipoDocumento.isEmpty()) {
-            throw new ClienteException(ClienteException.TIPO_DOCUMENTO_INVALIDO);
+            throw new ClienteException(ClienteException.INVALID_DOCUMENT_TYPE);
         }
 
         if (!tipoDocumento.equals(TipoDocumento.PASAPORTE.name()) && !tipoDocumento.equals(TipoDocumento.DNI.name())) {
-            throw new ClienteException(ClienteException.TIPO_DOCUMENTO_INVALIDO);
+            throw new ClienteException(ClienteException.INVALID_DOCUMENT_TYPE);
         }
-
-        verificarLetraNumeroDocumento(tipoDocumento);
     }
 
-    private void verificarFechaNacimiento(String fechaNacimiento) {
+    private void validateFechaNacimiento(String fechaNacimiento) {
         if (fechaNacimiento == null || fechaNacimiento.isEmpty()) {
-            throw new ClienteException(ClienteException.FECHA_NACIMIENTO_INVALIDA);
+            throw new ClienteException(ClienteException.INVALID_BIRTH_DATE);
         }
 
-        LocalDate fechaNacimientoLocalDate = convertirFechaNacimiento(fechaNacimiento);
+        LocalDate fechaNacimientoLocalDate = convertToLocalDate(fechaNacimiento);
         if (fechaNacimientoLocalDate.isAfter(LocalDate.now())) {
-            throw new ClienteException(ClienteException.FECHA_NACIMIENTO_INVALIDA);
+            throw new ClienteException(ClienteException.INVALID_BIRTH_DATE);
         }
     }
 
-    private LocalDate convertirFechaNacimiento(String fechaNacimiento) {
+    private LocalDate convertToLocalDate(String fechaNacimiento) {
         try {
             return LocalDate.parse(fechaNacimiento);
         } catch (Exception e) {
-            throw new ClienteException(ClienteException.FECHA_NACIMIENTO_INVALIDA);
+            throw new ClienteException(ClienteException.INVALID_BIRTH_DATE);
         }
     }
 
-    private String convertirFechaNacimiento(LocalDate fechaNacimiento) {
+    private String convertString(LocalDate fechaNacimiento) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             return fechaNacimiento.format(formatter);
         } catch (Exception e) {
-            throw new ClienteException(ClienteException.FECHA_NACIMIENTO_INVALIDA);
+            throw new ClienteException(ClienteException.INVALID_BIRTH_DATE);
         }
     }
 

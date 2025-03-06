@@ -1,13 +1,13 @@
 package backend.mcsvclientes.exceptions;
 
 public class ClienteException extends RuntimeException {
-    public static final String ID_INVALIDO = "ID inválido";
-    public static final String NOMBRE_INVALIDO = "El nombre no puede ser nulo o vacio";
-    public static final String APELLIDO_INVALIDO = "El apellido no puede ser nulo o vacio";
-    public static final String NUMERO_DOCUMENTO_INVALIDO = "El número de documento no puede ser nulo o vacio";
-    public static final String TIPO_DOCUMENTO_INVALIDO = "El tipo de documento es inválido";
-    public static final String FECHA_NACIMIENTO_INVALIDA = "La fecha de nacimiento es inválida";
-    public static final String CLIENTE_NO_ENCONTRADO = "Cliente no encontrado";
+    public static final String ID_INVALID = "Invalid ID";
+    public static final String INVALID_NAME = "Name cannot be null or empty";
+    public static final String INVALID_LAST_NAME = "Last name cannot be null or empty";
+    public static final String INVALID_DOCUMENT_NUMBER = "Document number cannot be null or empty";
+    public static final String INVALID_DOCUMENT_TYPE = "Invalid document type";
+    public static final String INVALID_BIRTH_DATE = "Invalid birth date";
+    public static final String CLIENT_NOT_FOUND = "Client not found";
 
     public ClienteException(String message) {
         super(message);

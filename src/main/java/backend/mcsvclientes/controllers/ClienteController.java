@@ -31,8 +31,8 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Error interno")
     })
     @GetMapping
-    public ResponseEntity<List<ClienteResponseDTO>> listar() {
-        return new ResponseEntity<>(clienteService.listar(), HttpStatus.OK);
+    public ResponseEntity<List<ClienteResponseDTO>> listAll() {
+        return new ResponseEntity<>(clienteService.listAll(), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
@@ -45,7 +45,7 @@ public class ClienteController {
     })
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> registrar(@RequestBody ClienteRequestDTO cliente) {
-        return new ResponseEntity<>(clienteService.registrar(cliente), HttpStatus.OK);
+        return new ResponseEntity<>(clienteService.add(cliente), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
@@ -58,7 +58,7 @@ public class ClienteController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long id) {
-        return new ResponseEntity<>(clienteService.buscarPorId(id), HttpStatus.OK);
+        return new ResponseEntity<>(clienteService.finById(id), HttpStatus.OK);
     }
 
 }

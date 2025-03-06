@@ -33,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (esUriSwagger(request, response, filterChain)) return;
+        if (isUriSwagger(request, response, filterChain)) return;
 
         if (jwtToken != null) {
             jwtToken = jwtToken.substring(7);
@@ -63,7 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private boolean esUriSwagger(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+    private boolean isUriSwagger(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String[] swaggerWhiteList = {
                 "/swagger-ui",
                 "/v3/api-docs"
