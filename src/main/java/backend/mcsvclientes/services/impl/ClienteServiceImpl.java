@@ -36,9 +36,9 @@ public class ClienteServiceImpl implements ClienteService {
 
         Cliente cliente = clienteMapper.toEntity(dto);
 
-        clienteRepository.save(cliente);
+        Cliente clientSaved = clienteRepository.save(cliente);
 
-        ClienteResponseDTO response = clienteMapper.toResponseDTO(cliente);
+        ClienteResponseDTO response = clienteMapper.toResponseDTO(clientSaved);
 
         return response;
     }
@@ -71,13 +71,13 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     private void validateNombre(String nombre) {
-        if (nombre == null || nombre.isEmpty()) {
+        if (nombre == null || nombre.isBlank()) {
             throw new ClienteException(ClienteException.INVALID_NAME);
         }
     }
 
     private void validateApellido(String apellido) {
-        if (apellido == null || apellido.isEmpty()) {
+        if (apellido == null || apellido.isBlank()) {
             throw new ClienteException(ClienteException.INVALID_LAST_NAME);
         }
     }
