@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -30,8 +31,8 @@ public class ClienteServiceImpl implements ClienteService {
     public ClienteResponseDTO add(ClienteRequestDTO dto) {
         validateNombre(dto.nombre());
         validateApellido(dto.apellido());
-        validateNumeroDocumento(dto.numeroDocumento());
         validateTipoDocumento(dto.tipoDocumento());
+        validateNumeroDocumento(dto.numeroDocumento(), dto.tipoDocumento());
         validateFechaNacimiento(dto.fechaNacimiento());
 
         Cliente cliente = clienteMapper.toEntity(dto);
@@ -82,11 +83,22 @@ public class ClienteServiceImpl implements ClienteService {
         }
     }
 
-    private void validateNumeroDocumento(String numeroDocumento) {
-        if (numeroDocumento == null || numeroDocumento.isEmpty()) {
+    private void validateNumeroDocumento(String numeroDocumento, String tipoDocumento) {
+        if (numeroDocumento == null || numeroDocumento.isBlank()) {
             throw new ClienteException(ClienteException.INVALID_DOCUMENT_NUMBER);
         }
+
         validateLetraNumeroDocumento(numeroDocumento);
+
+        if (Objects.equals(tipoDocumento, TipoDocumento.DNI.name())) {
+            validateDni(numeroDocumento);
+        }
+    }
+
+    private void validateDni(String numeroDocumento) {
+        if (numeroDocumento.length() != 8) {
+            throw new ClienteException(ClienteException.INVALID_DOCUMENT_NUMBER);
+        }
     }
 
     private void validateTipoDocumento(String tipoDocumento) {

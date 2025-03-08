@@ -32,6 +32,34 @@ class ClienteServiceImplTest {
     private ClienteServiceImpl service;
 
     @Test
+    void testAdd_whenNumeroDocumentoIsDniAndNumeroDocumentoIsDifferent8Characters_returnError() {
+        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "123456789", "DNI", "1994-05-04");
+
+        assertThrows(ClienteException.class, () -> service.add(dto));
+    }
+
+    @Test
+    void testAdd_whenNumeroDocumentoIsBlank_returnError() {
+        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "   ", "DNI", "1994-05-04");
+
+        assertThrows(ClienteException.class, () -> service.add(dto));
+    }
+
+    @Test
+    void testAdd_whenNumeroDocumentoIsNull_returnError() {
+        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", null, "DNI", "1994-05-04");
+
+        assertThrows(ClienteException.class, () -> service.add(dto));
+    }
+
+    @Test
+    void testAdd_whenNumeroDocumentoIsEmpty_returnError() {
+        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "", "DNI", "1994-05-04");
+
+        assertThrows(ClienteException.class, () -> service.add(dto));
+    }
+
+    @Test
     void testAdd_whenApellidoIsBlank_returnError() {
         ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "    ", "12345678", "DNI", "1994-05-04");
 
