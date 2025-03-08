@@ -24,6 +24,7 @@ public class Cliente {
 
     private LocalDate fechaNacimiento;
 
+    @Column(unique = true)
     private String numeroDocumento;
 
     @Enumerated(EnumType.STRING)

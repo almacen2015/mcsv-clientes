@@ -44,7 +44,7 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Error interno")
     })
     @PostMapping
-    public ResponseEntity<ClienteResponseDTO> registrar(@RequestBody ClienteRequestDTO cliente) {
+    public ResponseEntity<ClienteResponseDTO> add(@RequestBody ClienteRequestDTO cliente) {
         return new ResponseEntity<>(clienteService.add(cliente), HttpStatus.OK);
     }
 
@@ -57,7 +57,7 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Error interno")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ClienteResponseDTO> getById(@PathVariable Long id) {
         return new ResponseEntity<>(clienteService.finById(id), HttpStatus.OK);
     }
 
