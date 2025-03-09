@@ -10,6 +10,6 @@ public interface ClienteService {
 
     List<ClienteResponseDTO> listAll();
 
-    ClienteResponseDTO finById(Long id);
+    ClienteResponseDTO getById(Long id);
 
 }

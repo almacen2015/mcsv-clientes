@@ -52,7 +52,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public ClienteResponseDTO finById(Long id) {
+    public ClienteResponseDTO getById(Long id) {
         validateId(id);
         Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ClienteException(ClienteException.CLIENT_NOT_FOUND));
 

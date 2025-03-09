@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,6 +31,48 @@ class ClienteServiceImplTest {
 
     @InjectMocks
     private ClienteServiceImpl service;
+
+    @Test
+    void testGetById_whenIdIsNotFound_returnError() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ClienteException.class, () -> service.getById(1L));
+    }
+
+    @Test
+    void testGetById_whenIdIsLessThanZero_returnError() {
+        assertThrows(ClienteException.class, () -> service.getById(-1L));
+    }
+
+    @Test
+    void testGetById_whenIdIsZero_returnError() {
+        assertThrows(ClienteException.class, () -> service.getById(0L));
+    }
+
+    @Test
+    void testGetById_whenIdIsNull_returnError() {
+        assertThrows(ClienteException.class, () -> service.getById(null));
+    }
+
+    @Test
+    void testGetById_whenIdIsValid_returnClient() {
+        Cliente cliente1 = Cliente.builder()
+                .id(1L)
+                .nombre("Victor")
+                .apellido("Orbegozo")
+                .numeroDocumento("12345678")
+                .tipoDocumento(TipoDocumento.DNI)
+                .fechaNacimiento(LocalDate.of(1994, 5, 4))
+                .build();
+        when(repository.findById(1L)).thenReturn(Optional.of(cliente1));
+
+        ClienteResponseDTO response = service.getById(1L);
+
+        assertThat(response).isNotNull();
+        assertEquals(1, response.id());
+        assertEquals("Victor", response.nombre());
+
+    }
 
     @Test
     void testAdd_whenFechaNacimientoIsInvalid_returnError() {
