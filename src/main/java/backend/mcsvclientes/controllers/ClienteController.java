@@ -61,4 +61,17 @@ public class ClienteController {
         return new ResponseEntity<>(clienteService.getById(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @Operation(summary = "Buscar cliente por número de documento", description = "Buscar cliente por número de documento")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "401", description = "No autorizado"),
+            @ApiResponse(responseCode = "500", description = "Error interno")
+    })
+    @GetMapping("/document/{documentNumber}/{documentType}")
+    public ResponseEntity<ClienteResponseDTO> getByDocumentNumber(@PathVariable String documentNumber, @PathVariable String documentType) {
+        return new ResponseEntity<>(clienteService.getByDocumentNumber(documentNumber, documentType), HttpStatus.OK);
+    }
+
 }

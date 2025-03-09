@@ -33,6 +33,39 @@ class ClienteServiceImplTest {
     private ClienteServiceImpl service;
 
     @Test
+    void testGetByDocumentNumber_whenDocumentTypeIsInvalid_returnError() {
+        assertThrows(ClienteException.class, () -> {
+            service.getByDocumentNumber("12345678", "AAA");
+        });
+    }
+
+    @Test
+    void testGetByDocumentNumber_whenDocumentIsInvalid_returnError() {
+        assertThrows(ClienteException.class, () -> {
+            service.getByDocumentNumber("1234", TipoDocumento.DNI.name());
+        });
+    }
+
+    @Test
+    void testGetByDocumentNumber_whenDocumentIsValid_returnClient() {
+        Cliente cliente1 = Cliente.builder()
+                .id(1L)
+                .nombre("Victor")
+                .apellido("Orbegozo")
+                .numeroDocumento("12345678")
+                .tipoDocumento(TipoDocumento.DNI)
+                .fechaNacimiento(LocalDate.of(1994, 5, 4))
+                .build();
+
+        when(repository.findByNumeroDocumento("12345678")).thenReturn(Optional.of(cliente1));
+
+        ClienteResponseDTO response = service.getByDocumentNumber("12345678", TipoDocumento.DNI.name());
+
+        assertThat(response).isNotNull();
+        assertEquals(1, response.id());
+    }
+
+    @Test
     void testGetById_whenIdIsNotFound_returnError() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
@@ -139,6 +172,20 @@ class ClienteServiceImplTest {
     @Test
     void testAdd_whenTipoDocumentoIsEmpty_returnError() {
         ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "12345678", "", "1994-05-04");
+        assertThrows(ClienteException.class, () -> service.add(dto));
+    }
+
+    @Test
+    void testAdd_whenDocumentNumberExists_returnError() {
+        ClienteRequestDTO dto = new ClienteRequestDTO(
+                "Victor",
+                "Orbegozo",
+                "12345678",
+                "DNI",
+                "1994-05-04");
+
+        when(repository.existsByNumeroDocumento("12345678")).thenReturn(Boolean.TRUE);
+
         assertThrows(ClienteException.class, () -> service.add(dto));
     }
 

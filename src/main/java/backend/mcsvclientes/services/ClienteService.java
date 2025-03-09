@@ -12,4 +12,6 @@ public interface ClienteService {
 
     ClienteResponseDTO getById(Long id);
 
+    ClienteResponseDTO getByDocumentNumber(String documentNumber, String documentType);
+
 }

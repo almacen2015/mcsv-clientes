@@ -20,7 +20,8 @@ public class ExceptionAdvice {
             ClienteException.INVALID_BIRTH_DATE,
             ClienteException.INVALID_DOCUMENT_NUMBER,
             ClienteException.INVALID_DOCUMENT_TYPE,
-            ClienteException.CLIENT_NOT_FOUND
+            ClienteException.CLIENT_NOT_FOUND,
+            ClienteException.DOCUMENT_NUMBER_EXISTS
     );
 
     @ExceptionHandler(ClienteException.class)

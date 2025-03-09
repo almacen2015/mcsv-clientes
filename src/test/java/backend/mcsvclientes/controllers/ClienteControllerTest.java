@@ -2,6 +2,7 @@ package backend.mcsvclientes.controllers;
 
 import backend.mcsvclientes.models.dtos.ClienteRequestDTO;
 import backend.mcsvclientes.models.dtos.ClienteResponseDTO;
+import backend.mcsvclientes.models.entities.TipoDocumento;
 import backend.mcsvclientes.security.TestSecurityConfig;
 import backend.mcsvclientes.services.ClienteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +35,27 @@ class ClienteControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Test
+    void testGetByDocumentNumber_whenClientFound_returnClient() throws Exception {
+        ClienteResponseDTO client = new ClienteResponseDTO(
+                1L,
+                "Victor",
+                "Orbegozo",
+                "DNI",
+                "1994-05-04",
+                "12345678"
+        );
+
+        when(service.getByDocumentNumber("12345678", TipoDocumento.DNI.name())).thenReturn(client);
+        // Act
+        mockMvc.perform(get("/api/clientes/document/{documentNumber}/{documentType}","12345678","DNI")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.nombre").value("Victor"));
+
+    }
 
     @Test
     void testAdd_whenRequestIsValid_returnClient() throws Exception {

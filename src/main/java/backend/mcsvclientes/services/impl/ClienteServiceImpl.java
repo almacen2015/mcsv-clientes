@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -27,6 +28,19 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public ClienteResponseDTO getByDocumentNumber(String documentNumber, String documentType) {
+        validateLetraNumeroDocumento(documentNumber);
+        validateNumeroDocumento(documentNumber, documentType);
+        validateTipoDocumento(documentType);
+
+        Optional<Cliente> clientFound = clienteRepository.findByNumeroDocumento(documentNumber);
+        if (clientFound.isPresent()) {
+            return clienteMapper.toResponseDTO(clientFound.get());
+        }
+        return null;
+    }
+
+    @Override
     @Transactional(rollbackFor = ClienteException.class)
     public ClienteResponseDTO add(ClienteRequestDTO dto) {
         validateNombre(dto.nombre());
@@ -34,6 +48,10 @@ public class ClienteServiceImpl implements ClienteService {
         validateTipoDocumento(dto.tipoDocumento());
         validateNumeroDocumento(dto.numeroDocumento(), dto.tipoDocumento());
         validateFechaNacimiento(dto.fechaNacimiento());
+
+        if (clienteRepository.existsByNumeroDocumento(dto.numeroDocumento())) {
+            throw new ClienteException(ClienteException.DOCUMENT_NUMBER_EXISTS);
+        }
 
         Cliente cliente = clienteMapper.toEntity(dto);
 
