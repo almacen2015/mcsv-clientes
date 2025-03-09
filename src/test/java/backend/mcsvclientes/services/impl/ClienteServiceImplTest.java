@@ -32,26 +32,70 @@ class ClienteServiceImplTest {
     private ClienteServiceImpl service;
 
     @Test
+    void testAdd_whenFechaNacimientoIsInvalid_returnError() {
+        ClienteRequestDTO dto = new ClienteRequestDTO(
+                "Victor",
+                "Orbegozo",
+                "12345678",
+                "DNI",
+                "19-19-19");
+        assertThrows(ClienteException.class, () -> service.add(dto));
+    }
+
+    @Test
+    void testAdd_whenFechaNacimientoIsBlank_returnError() {
+        ClienteRequestDTO dto = new ClienteRequestDTO(
+                "Victor",
+                "Orbegozo",
+                "12345678",
+                "DNI",
+                " ");
+        assertThrows(ClienteException.class, () -> service.add(dto));
+    }
+
+    @Test
+    void testAdd_whenFechaNacimientoIsEmpty_returnError() {
+        ClienteRequestDTO dto = new ClienteRequestDTO(
+                "Victor",
+                "Orbegozo",
+                "12345678",
+                "DNI",
+                "");
+        assertThrows(ClienteException.class, () -> service.add(dto));
+    }
+
+    @Test
+    void testAdd_whenFechaNacimientoIsNull_returnError() {
+        ClienteRequestDTO dto = new ClienteRequestDTO(
+                "Victor",
+                "Orbegozo",
+                "12345678",
+                "AAAAA",
+                null);
+        assertThrows(ClienteException.class, () -> service.add(dto));
+    }
+
+    @Test
     void testAdd_whenTipoDocumentoIsInvalid_returnError() {
-        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "123456789", "AAAAA", "1994-05-04");
+        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "12345678", "AAAAA", "1994-05-04");
         assertThrows(ClienteException.class, () -> service.add(dto));
     }
 
     @Test
     void testAdd_whenTipoDocumentoIsBlank_returnError() {
-        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "123456789", "   ", "1994-05-04");
+        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "12345678", "   ", "1994-05-04");
         assertThrows(ClienteException.class, () -> service.add(dto));
     }
 
     @Test
     void testAdd_whenTipoDocumentoIsNull_returnError() {
-        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "123456789", null, "1994-05-04");
+        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "12345678", null, "1994-05-04");
         assertThrows(ClienteException.class, () -> service.add(dto));
     }
 
     @Test
     void testAdd_whenTipoDocumentoIsEmpty_returnError() {
-        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "123456789", "", "1994-05-04");
+        ClienteRequestDTO dto = new ClienteRequestDTO("Victor", "Orbegozo", "12345678", "", "1994-05-04");
         assertThrows(ClienteException.class, () -> service.add(dto));
     }
 
